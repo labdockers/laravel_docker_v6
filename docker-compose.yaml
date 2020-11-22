@@ -1,0 +1,96 @@
+version: "2.3"
+services:
+
+  #PHP Service
+  app:
+    # Aqui ele vai construir a minha aplicação onde vai ficar os arquivos do Laravel
+    build:
+      context: ./app/
+      dockerfile: Dockerfile-app-php-fpm
+    #nome do meu container
+    container_name: app
+    #Opção da versão do linux Alpine, esse alpine é bom porque ele simples e muito leve
+    working_dir: /application
+    restart: always
+    # Se eu descomitar vai dá um erro, vou precisar fazer processo que tem no arquivo em texto instrucoes
+    volumes:
+      - ./app/:/var/www
+    networks:
+      - app-network-laravel
+    environment:
+      - DB_DATABASE=laravel
+      - DB_PASSWORD=root
+      - DB_USERNAME=root
+      - DB_HOST=db
+      - REDIS_HOST=redis
+    depends_on:
+      db:
+        condition: service_healthy
+
+  #NGINX Service
+  web:
+    build:
+      context:  ./docker/nginx
+      dockerfile: Dockerfile-nginx
+    container_name: "nginx-container"
+    restart: always
+    ports:
+      - "8081:80"
+    volumes:
+      - ./app/:/var/www
+    networks:
+      - app-network-laravel
+
+  #REDIS Service
+  redis:
+    image: redis:alpine
+    expose:
+      - 6379
+    restart: always
+
+  #MYSQL Service
+  db:
+    image: mysql:8.0
+    # Esse comando essencial algumas versão do docker para não dá erro no login do mysql
+    command: --innodb-use-native-aio=0
+    command: --default-authentication-plugin=mysql_native_password
+    # Nome do Container
+    container_name: db
+    # Caso  ele caia ele suba novamente
+    restart: always
+    tty: true
+    ports:
+      - "33600:3306"
+    environment:
+      - MYSQL_DATABASE=laravel
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=root
+    # Aqui copia os dados no mysql que está no container para uma pasta local do meu computador, assim se eu deletar o container não perco os dados do banco.
+    volumes:
+      - ./docker/dbdata:/var/lib/mysql
+    # Rede que ele faz parte para se comunicar com outros containers
+    networks:
+      - app-network-laravel
+    healthcheck:
+      test: ["CMD-SHELL", 'mysql -uroot --database=laravel --password=root --execute="SELECT count(table_name) > 0 FROM information_schema.tables;" --skip-column-names -B']
+      interval: 20s
+      timeout: 10s
+      retries: 10
+
+  #PHPMYADMIN  Service
+  phpmyadmin:
+    container_name: phpmyadmin_container
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+    restart: always
+    ports:
+      - 8082:80
+    networks:
+      - app-network-laravel
+
+networks:
+  app-network-laravel:
+    driver: bridge

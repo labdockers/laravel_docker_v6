@@ -1,0 +1,36 @@
+        FROM php:7.4-fpm
+        RUN docker-php-ext-install pdo pdo_mysql
+
+        # Para alterar o caminho da versão LTS do node acessar essa página
+        # https://github.com/nodesource/distributions#debmanual
+        RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+        RUN apt-get update && apt-get install -y nodejs
+
+        WORKDIR /var/www
+        RUN rm -rf /var/www/html
+        # Install composer
+        RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+        COPY .  /var/www
+
+        # RUN chown -R www-data:www-data /var/www
+
+        # Aqui estou executando composer install se tiver dependência ele vai instalar
+        RUN composer install && \
+            cp .env.example .env && \
+            php artisan key:generate && \
+            php artisan config:cache
+
+        RUN npm install
+
+        RUN ln -s public html
+            # Essa parte quando quiser ativar teste unitário do PHPunit
+            # vendor/bin/phpunit
+
+        RUN rm -rf /var/lib/apt/lists/*
+
+        RUN chmod -R 777 /var/www/storage/*
+        #RUN chown -R 33:33 /var/www
+
+        # Expose port 9000 and start php-fpm server
+        EXPOSE 9000

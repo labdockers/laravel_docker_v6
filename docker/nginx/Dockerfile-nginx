@@ -1,0 +1,7 @@
+FROM nginx:1.17.10-alpine
+
+#Aqui estou removendo as configuracoes padrao do nginx
+RUN rm /etc/nginx/conf.d/default.conf 
+
+#Aqui estou adicionando as minhas configuracoes
+COPY ./nginx.conf /etc/nginx/conf.d
