@@ -1,6 +1,6 @@
 # Sobre o projeto
 
-Criar um layout no blade.php usando o tailwindcss
+Estrutura inicial para desenvolver com laravel usando o docker.
 
 # Material de Apoio
 [LINK DA AULA](https://www.youtube.com/watch?v=oVRWQJE5a1c&t=2583s)
