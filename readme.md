@@ -6,9 +6,9 @@ Estrutura inicial para desenvolver com laravel usando o docker.
 [LINK DA AULA](https://www.youtube.com/watch?v=oVRWQJE5a1c&t=2583s)
 
 # Sobre o código
- * Laravel 8
- * nginx:1.17.10-alpine
- * php:7.4-fpm
+ * [Laravel 8](https://laravel.com/docs/8.x/releases)
+ * [nginx:1.17.10-alpine](https://nginx.org/en/CHANGES)
+ * [php:7.4-fpm](https://hub.docker.com/_/php)
  * redis:alpine
  * phpmyadmin:latest
  * Mysql 8.0
