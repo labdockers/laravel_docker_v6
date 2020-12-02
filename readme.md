@@ -16,21 +16,20 @@ a versão mais completa é só tirar o <strong>alpine</strong>. Caso queira atua
 docker hub do php, nginx e entre outros e só visualizar as nomenclatura da versão nova, por exemplo, se tiver atualização, php:7.5, só 
 trocar o 7.4 pelo 7.5 que ele vai atualizar, mesmo formato para nginx.</p>
 <br>
-Uma observação, o meu arquivo <b>Dockerfile-app-php-fpm</b> na <b>linha 12</b> ele dá erro as vezes quando atualiza o laravel, por conta  e umas da dependência precisa do git para, e como não 
-tem o git instalado na minha configuração do docker-compose, por isso, tem que executar o comando.
 
----
+----
+Faça o download do laravel normalmente de acordo com a documentação do laravel e copie os arquivos lá para dentro da pasta app
+onde está do Dockerfile-app-php-fpm. Não faça o download do laravel direto porque como tem o arquivo Dockerfile-app-fpm ele não vai
+permitir porque o laravel só baixar onde a pasta está vazia, a não ser que voce tire o arquivo Dockerfile-app-fpm e coloque 
+em outro lugar, faça o download do laravel e depois cole novamente o Dockerfile-app-fpm do local onde você tirou a primeira vez.
 
-````
-composer update
-````
-ou
-````
-composer install
-````
+Esse comando é para fazer download do laravel mais recente.
 
-Para instalar as dependências do seu projeto na sua máquina antes de fazer 
-deploy para container no docker.
+```
+composer create-project --prefer-dist laravel/laravel nomedapasta
+```
+
+Agora só seguir os próximos passos.
 
 # Ordem de comando
 
@@ -44,7 +43,8 @@ problema de permissão de pasta no seu computador
 chmod -R 777 dbdata
 ```
 
-Acessar o container da aplicação se não for versão alpine 
+## Após todos containers estiver pronto e acessível.
+Você pode acessar o container da aplicação se não for versão alpine 
 ```
 docker exec -it nome_container /bin/bash
 ```
@@ -132,7 +132,7 @@ Caso altere alguma coisa nessa parte, execute o comando
 docker-compose up -d --build
 ```
 
-# Observação
+# Se não tiver conectando com o banco de dados
 
 Após finalizar a criação da imagem do seu container, acesse ele pelo comando
 ```
@@ -153,7 +153,7 @@ Digite
 ```
 cp .env.example env.
 ```
-Logo após
+O comando acima vai copiar as informações que tem no env.example para o arquivo env. Logo após digite o comando abaixo
 ```
 php artisan key:generate
 ```
