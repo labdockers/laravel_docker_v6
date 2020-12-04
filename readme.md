@@ -11,7 +11,7 @@ Estrutura inicial para desenvolver com laravel usando o docker.
  * [Mysql 8.0](https://hub.docker.com/_/mysql)
  * [Node 14 LTS](https://github.com/nodesource/distributions#debmanual)
 
-<p>A versão <strong>alpine</strong> por ela mais leve em questão de tamanho de arquivo. Contudo, caso queria usar
+<p>A versão <strong>alpine</strong> por ela ser mais leve em questão de tamanho de arquivo. Contudo, caso queria usar
 a versão mais completa é só tirar o <strong>alpine</strong>. Caso queira atualizar para versão mais recente, apenas acompanha no site
 docker hub do php, nginx e entre outros e só visualizar as nomenclatura da versão nova, por exemplo, se tiver atualização, php:7.5, só 
 trocar o 7.4 pelo 7.5 que ele vai atualizar, mesmo formato para nginx.</p>
