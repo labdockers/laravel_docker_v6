@@ -166,7 +166,7 @@ Se tiver problemas com storage é a questão de permissão. Pode utilizar esse c
 docker exec app chmod -R 777 /var/www/storage
 ```
 
-#Problema com usuário
+# Problema com usuário
 
 Use esse comando no terminal, ele vai pegar usuário do seu computador e adicionar no grupo dos usuários
 para editar o arquivo.
